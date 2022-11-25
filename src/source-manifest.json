@@ -19,6 +19,12 @@
       "commitSha": "38e9569f3ea71f51125f9351deb49b5a427129b5"
     },
     {
+      "packageVersion": "7.0.100-1.22552.1",
+      "path": "linker",
+      "remoteUri": "https://github.com/dotnet/linker",
+      "commitSha": "391ac60bbfb2c618b82f08af728d2d4d259d584e"
+    },
+    {
       "packageVersion": "8.0.0-alpha.1.22551.9",
       "path": "runtime",
       "remoteUri": "https://github.com/dotnet/runtime",
@@ -58,6 +64,11 @@
       "path": "aspnetcore/src/submodules/spa-templates",
       "remoteUri": "https://github.com/dotnet/spa-templates.git",
       "commitSha": "c824ca94c64e8a227e9e3e48e7513abdd2a3cfce"
+    },
+    {
+      "path": "linker/external/cecil",
+      "remoteUri": "https://github.com/mono/cecil.git",
+      "commitSha": "1840b7410d37a613e684b6f9650e39e2d4950bbb"
     }
   ]
 }
