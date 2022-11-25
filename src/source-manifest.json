@@ -19,6 +19,12 @@
       "commitSha": "bdd67af67dbf43c0f5e9151b98dc100b9555898a"
     },
     {
+      "packageVersion": "8.0.100-alpha.1.22553.26",
+      "path": "sdk",
+      "remoteUri": "https://github.com/dotnet/sdk",
+      "commitSha": "d609699901b0d25bf939553b342ea887f8d7ef7f"
+    },
+    {
       "packageVersion": "1.1.0-rc.22551.3",
       "path": "test-templates",
       "remoteUri": "https://github.com/dotnet/test-templates",
