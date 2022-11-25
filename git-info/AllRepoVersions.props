@@ -7,6 +7,8 @@
     <aspnetcoreOutputPackageVersion>8.0.0-alpha.1.22552.16</aspnetcoreOutputPackageVersion>
     <deploymenttoolsGitCommitHash>c3ad00ae84489071080a606f6a8e43c9a91a5cc2</deploymenttoolsGitCommitHash>
     <deploymenttoolsOutputPackageVersion>1.0.0-preview5.1.22263.1</deploymenttoolsOutputPackageVersion>
+    <formatGitCommitHash>bee17d238280246c6a8e6decbd86a91fda6d00c6</formatGitCommitHash>
+    <formatOutputPackageVersion>7.0.351202</formatOutputPackageVersion>
     <fsharpGitCommitHash>a934894437658f001c6388d33859da73a1ba2ba9</fsharpGitCommitHash>
     <fsharpOutputPackageVersion>7.0.1-beta.22552.2</fsharpOutputPackageVersion>
     <installerGitCommitHash>38e9569f3ea71f51125f9351deb49b5a427129b5</installerGitCommitHash>
