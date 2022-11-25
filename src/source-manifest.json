@@ -35,6 +35,12 @@
       "path": "test-templates",
       "remoteUri": "https://github.com/dotnet/test-templates",
       "commitSha": "ca9eef3c1518234d96cc1c2828f1bdf90fc708f8"
+    },
+    {
+      "packageVersion": "17.5.0-preview-20221102-03",
+      "path": "vstest",
+      "remoteUri": "https://github.com/microsoft/vstest",
+      "commitSha": "eb9fca1710b0430741b279fccdfb24a72151a45b"
     }
   ],
   "submodules": [
