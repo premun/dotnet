@@ -25,6 +25,12 @@
       "commitSha": "391ac60bbfb2c618b82f08af728d2d4d259d584e"
     },
     {
+      "packageVersion": "17.5.0-preview-22526-01",
+      "path": "msbuild",
+      "remoteUri": "https://github.com/dotnet/msbuild",
+      "commitSha": "3777dcaf7edb3e86a070037ba53e742dd1872873"
+    },
+    {
       "packageVersion": "4.5.0-1.22553.5",
       "path": "roslyn",
       "remoteUri": "https://github.com/dotnet/roslyn",
