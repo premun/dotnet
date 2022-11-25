@@ -3598,7 +3598,7 @@ namespace NuGet.CommandLine.Test
                 // Find all non _._ compile assets
                 var flowingCompile = assetsFile.Targets.Single(target => string.IsNullOrEmpty(target.RuntimeIdentifier)).Libraries
                     .Where(e => e.Type == "project")
-                    .Where(e => e.CompileTimeAssemblies.Where(f => !f.Path.EndsWith("_._")).Any())
+                    .Where(e => e.CompileTimeAssemblies.Any(f => !f.Path.EndsWith("_._")))
                     .Select(e => e.Name)
                     .OrderBy(s => s, StringComparer.OrdinalIgnoreCase);
 
@@ -3607,7 +3607,7 @@ namespace NuGet.CommandLine.Test
                 // Runtime should always flow
                 var flowingRuntime = assetsFile.Targets.Single(target => string.IsNullOrEmpty(target.RuntimeIdentifier)).Libraries
                     .Where(e => e.Type == "project")
-                    .Where(e => e.RuntimeAssemblies.Where(f => !f.Path.EndsWith("_._")).Any())
+                    .Where(e => e.RuntimeAssemblies.Any(f => !f.Path.EndsWith("_._")))
                     .Select(e => e.Name)
                     .OrderBy(s => s, StringComparer.OrdinalIgnoreCase);
 
@@ -3702,7 +3702,7 @@ namespace NuGet.CommandLine.Test
                 // Find all non _._ compile assets
                 var flowingCompile = assetsFile.Targets.Single(e => string.IsNullOrEmpty(e.RuntimeIdentifier)).Libraries
                     .Where(e => e.Type == "project")
-                    .Where(e => e.CompileTimeAssemblies.Where(f => !f.Path.EndsWith("_._")).Any())
+                    .Where(e => e.CompileTimeAssemblies.Any(f => !f.Path.EndsWith("_._")))
                     .Select(e => e.Name)
                     .OrderBy(s => s, StringComparer.OrdinalIgnoreCase);
 
@@ -3711,7 +3711,7 @@ namespace NuGet.CommandLine.Test
                 // Runtime should always flow
                 var flowingRuntime = assetsFile.Targets.Single(e => string.IsNullOrEmpty(e.RuntimeIdentifier)).Libraries
                     .Where(e => e.Type == "project")
-                    .Where(e => e.RuntimeAssemblies.Where(f => !f.Path.EndsWith("_._")).Any())
+                    .Where(e => e.RuntimeAssemblies.Any(f => !f.Path.EndsWith("_._")))
                     .Select(e => e.Name)
                     .OrderBy(s => s, StringComparer.OrdinalIgnoreCase);
 
@@ -11391,6 +11391,46 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
                 r.Success.Should().BeTrue(because: r.AllOutput);
                 r.AllOutput.Should().NotContain("NU1506");
             }
+        }
+
+        [Fact]
+        public async Task NuGetRestoreRestore_WithWarningsNotAsErrors_SucceedsAndRaisesWarning()
+        {
+            // Arrange
+            using var pathContext = new SimpleTestPathContext();
+            var solution = new SimpleTestSolutionContext(pathContext.SolutionRoot);
+            var projectA = SimpleTestProjectContext.CreateNETCoreWithSDK(
+                    "a",
+                    pathContext.SolutionRoot,
+                    "net472");
+            // Add 1.0.0
+            projectA.AddPackageToAllFrameworks(new SimpleTestPackageContext()
+            {
+                Id = "x",
+                Version = "1.0.0"
+            });
+            // But create only 2.0.0 on the server.
+            await SimpleTestPackageUtility.CreateFolderFeedV3Async(pathContext.PackageSource, new SimpleTestPackageContext { Id = "x", Version = "2.0.0" });
+            projectA.Properties.Add("TreatWarningsAsErrors", "true");
+            projectA.Properties.Add("WarningsNotAsErrors", "NU1603");
+            solution.Projects.Add(projectA);
+            solution.Create(pathContext.SolutionRoot);
+
+            var args = new string[] {
+                    "restore",
+                    solution.SolutionPath,
+                    "-Verbosity",
+                    "detailed",
+                };
+            CommandRunnerResult result = CommandRunner.Run(
+                    Util.GetNuGetExePath(),
+                    pathContext.WorkingDirectory.Path,
+                    string.Join(" ", args),
+                    waitForExit: true);
+
+            // Assert
+            result.Success.Should().BeTrue(because: result.AllOutput);
+            result.Output.Should().Contain("WARNING: NU1603");
         }
 
         /// <summary>
