@@ -73,6 +73,12 @@
       "commitSha": "4d37f75b11b8613594fcb38bd9b965a75877c49f"
     },
     {
+      "packageVersion": "8.0.0-alpha.1.22552.1",
+      "path": "source-build-reference-packages",
+      "remoteUri": "https://github.com/dotnet/source-build-reference-packages",
+      "commitSha": "dab1b0db4f4937b9213c5aecc5a5279d88180741"
+    },
+    {
       "packageVersion": "1.4.0-beta2-21475-02",
       "path": "symreader",
       "remoteUri": "https://github.com/dotnet/symreader",
