@@ -7,6 +7,12 @@
       "commitSha": "fb6b2e25211f9d310aa03edfbda9e38a066960b1"
     },
     {
+      "packageVersion": "7.0.1-beta.22552.2",
+      "path": "fsharp",
+      "remoteUri": "https://github.com/dotnet/fsharp",
+      "commitSha": "a934894437658f001c6388d33859da73a1ba2ba9"
+    },
+    {
       "packageVersion": "8.0.100",
       "path": "installer",
       "remoteUri": "https://github.com/dotnet/installer",
