@@ -1,6 +1,12 @@
 {
   "repositories": [
     {
+      "packageVersion": "8.0.0-beta.22552.1",
+      "path": "arcade",
+      "remoteUri": "https://github.com/dotnet/arcade",
+      "commitSha": "5be556106f26f171f32187951b9a141f9580d03a"
+    },
+    {
       "packageVersion": "8.0.0-alpha.1.22552.16",
       "path": "aspnetcore",
       "remoteUri": "https://github.com/dotnet/aspnetcore",
