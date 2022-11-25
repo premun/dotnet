@@ -5,6 +5,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using NuGet.Common;
 using NuGet.Frameworks;
@@ -153,13 +154,19 @@ namespace NuGet.Commands
         /// <param name="message">Message which should be upgraded to error if needed.</param>
         public static void ApplyProjectWideWarningsAsErrorProperties(ILogMessage message, WarningProperties warningProperties)
         {
+            if (message is null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
+
             if (message.Level == LogLevel.Warning && warningProperties != null)
             {
-                if ((warningProperties.AllWarningsAsErrors && message.Code > NuGetLogCode.Undefined) ||
+                if ((warningProperties.AllWarningsAsErrors && message.Code > NuGetLogCode.Undefined && !warningProperties.WarningsNotAsErrors.Contains(message.Code)) ||
                     warningProperties.WarningsAsErrors.Contains(message.Code))
                 {
-                    // If the project wide AllWarningsAsErrors is true and the message has a valid code or
+                    // If the project wide AllWarningsAsErrors is true, the message has a valid code and warning not as error is not enabled or
                     // Project wide WarningsAsErrors contains the message code then upgrade to error.
+                    message.Message = string.Format(CultureInfo.CurrentCulture, Strings.WarningAsError, message.Message);
                     message.Level = LogLevel.Error;
                 }
             }
