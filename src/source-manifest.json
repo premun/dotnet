@@ -1,0 +1,11 @@
+{
+  "repositories": [
+    {
+      "packageVersion": "8.0.100",
+      "path": "installer",
+      "remoteUri": "https://github.com/dotnet/installer",
+      "commitSha": "38e9569f3ea71f51125f9351deb49b5a427129b5"
+    }
+  ],
+  "submodules": []
+}
