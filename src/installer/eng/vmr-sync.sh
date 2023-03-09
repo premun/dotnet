@@ -26,7 +26,7 @@
 ### Options:
 ###   -t, --tmp, --tmp-dir PATH
 ###       Required. Path to the temporary folder where repositories will be cloned
-###   --repository name:GIT_REF
+###   -r name:GIT_REF, --repository name:GIT_REF
 ###       Optional. Repository + git ref separated by colon to synchronize to.
 ###       This can be a specific commit, branch, tag..
 ###       When omitted, the script will synchronize the installer commit based on the version of the parent
@@ -87,16 +87,22 @@ function highlight () {
 }
 
 installer_dir=$(realpath "$scriptroot/../")
+
 tmp_dir=''
 vmr_dir=''
 vmr_branch='main'
 repository=''
+additional_remotes=''
 recursive=false
 verbosity=verbose
-additional_remotes="installer:$installer_dir"
 readme_template="$installer_dir/src/VirtualMonoRepo/README.template.md"
 tpn_template="$installer_dir/src/VirtualMonoRepo/THIRD-PARTY-NOTICES.template.txt"
 no_vmr_prepare=false
+
+# If installer is a repo, we're in an installer and not in the dotnet/dotnet repo
+if [[ -d "$installer_dir/.git" ]]; then
+  additional_remotes="installer:$installer_dir"
+fi
 
 while [[ $# -gt 0 ]]; do
   opt="$(echo "$1" | tr "[:upper:]" "[:lower:]")"
@@ -113,7 +119,7 @@ while [[ $# -gt 0 ]]; do
       vmr_branch=$2
       shift
       ;;
-    --repository)
+    -r|--repository)
       repository=$2
       shift
       ;;
@@ -232,6 +238,10 @@ if [[ "$recursive" == "true" ]]; then
   recursive_arg="--recursive"
 fi
 
+if [[ -n "$additional_remotes" ]]; then
+  additional_remotes="--additional-remotes $additional_remotes"
+fi
+
 # Synchronize the VMR
 
 "$dotnet" darc vmr update                    \
@@ -241,7 +251,7 @@ fi
   $recursive_arg                             \
   --readme-template "$readme_template"       \
   --tpn-template "$tpn_template"             \
-  --additional-remotes "$additional_remotes" \
+  $additional_remotes                        \
   "$repository"
 
 if [[ $? == 0 ]]; then
