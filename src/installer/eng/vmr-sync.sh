@@ -20,8 +20,8 @@
 ###   Synchronize the VMR to a specific commit of dotnet/runtime using custom fork:
 ###     ./vmr-sync.sh \
 ###        --repository runtime:e7e71da303af8dc97df99b098f21f526398c3943 \
-###        --remote runtime:https://github.com/yourfork/runtime \
-###        --tmp-dir "$HOME/repos/tmp"\
+###        --remote runtime:https://github.com/yourfork/runtime          \
+###        --tmp-dir "$HOME/repos/tmp"
 ###
 ### Options:
 ###   -t, --tmp, --tmp-dir PATH
@@ -31,15 +31,15 @@
 ###       This can be a specific commit, branch, tag..
 ###       When omitted, the script will synchronize the installer commit based on the version of the parent
 ###       where this script is stored.
+###   --remote name:URI
+###       Optional. Additional remote to use during the synchronization
+###       This can be used to synchronize to a commit from a fork of the repository
+###       Example: 'runtime:https://github.com/yourfork/runtime'
 ###   -v, --vmr, --vmr-dir PATH
 ###       Optional. Path to the dotnet/dotnet repository. When null, gets cloned to the temporary folder
 ###   -b, --branch, --vmr-branch BRANCH_NAME
 ###       Optional. Branch of the 'dotnet/dotnet' repo to synchronize to
 ###       This should match the target branch of the PR; defaults to 'main'
-###   --remote name:URI
-###       Optional. Additional remote to use during the synchronization
-###       This can be used to synchronize to a commit from a fork of the repository
-###       Example: 'runtime:https://github.com/yourfork/runtime'
 ###   --recursive
 ###       Optional. Recursively synchronize all the source build dependencies (declared in Version.Details.xml)
 ###       This is used when performing the full synchronization during installer's CI and the final VMR sync.
@@ -51,6 +51,8 @@
 ###   --tpn-template
 ###       Optional. Template for the header of VMRs THIRD-PARTY-NOTICES file.
 ###       Defaults to src/VirtualMonoRepo/THIRD-PARTY-NOTICES.template.txt
+###   --no-vmr-prepare
+###       Optional. Leave the VMR intact (otherwise checks out the target branch first)
 ###   --debug
 ###       Optional. Turns on the most verbose logging for the VMR tooling
 
@@ -94,6 +96,7 @@ verbosity=verbose
 additional_remotes="installer:$installer_dir"
 readme_template="$installer_dir/src/VirtualMonoRepo/README.template.md"
 tpn_template="$installer_dir/src/VirtualMonoRepo/THIRD-PARTY-NOTICES.template.txt"
+no_vmr_prepare=false
 
 while [[ $# -gt 0 ]]; do
   opt="$(echo "$1" | tr "[:upper:]" "[:lower:]")"
@@ -128,6 +131,9 @@ while [[ $# -gt 0 ]]; do
     --tpn-template)
       tpn_template=$2
       shift
+      ;;
+    --no-vmr-prepare)
+      no_vmr_prepare=true
       ;;
     -d|--debug)
       verbosity=debug
@@ -201,9 +207,11 @@ else
     exit 1
   fi
 
-  highlight "Preparing $vmr_dir"
-  git -C "$vmr_dir" checkout "$vmr_branch"
-  git -C "$vmr_dir" pull
+  if [[ "$no_vmr_prepare" == "false" ]]; then
+    highlight "Preparing $vmr_dir"
+    git -C "$vmr_dir" checkout "$vmr_branch"
+    git -C "$vmr_dir" pull
+  fi
 fi
 
 set -e
@@ -213,10 +221,10 @@ set -e
 highlight 'Installing .NET, preparing the tooling..'
 source "$scriptroot/common/tools.sh"
 InitializeDotNetCli true
-dotnet="$scriptroot/../.dotnet/dotnet"
+dotnet=$(realpath "$scriptroot/../.dotnet/dotnet")
 "$dotnet" tool restore
 
-highlight "Starting the synchronization to '$repository'.."
+highlight "Starting the synchronization of '$repository'.."
 set +e
 
 recursive_arg=''
