@@ -14,6 +14,8 @@ usage() {
     echo ""
 }
 
+# This is a stupid change
+
 buildBootstrap=true
 positional_args=()
 while :; do
