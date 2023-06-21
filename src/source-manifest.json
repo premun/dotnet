@@ -61,6 +61,12 @@
       "commitSha": "f673460632c689165071dd4fc6702e3a9ae45f1d"
     },
     {
+      "packageVersion": null,
+      "path": "llvm-project",
+      "remoteUri": "https://github.com/dotnet/llvm-project",
+      "commitSha": "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
+    },
+    {
       "packageVersion": "17.7.0-preview-23316-03",
       "path": "msbuild",
       "remoteUri": "https://github.com/dotnet/msbuild",
